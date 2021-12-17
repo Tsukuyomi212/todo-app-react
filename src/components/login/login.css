@@ -1,8 +1,8 @@
 .login-form-container {
   margin: 10% 30% 2%;
   padding: 3rem;
-  border: 1px solid #dabe92;
-  background-color: #dabe92;
+  border: 1px solid #92d1cd;
+  background-color: #92d1cd;
 }
 .login-input-container {
   margin: 1em 0;
@@ -12,7 +12,7 @@
   margin: 0.4em;
   width: 100%;
   display: inline-block;
-  border: 1px solid #dabe92;
+  border: 1px solid #92d1cd;
   box-sizing: border-box;
   height: 3em;
   padding: 0.7em;
