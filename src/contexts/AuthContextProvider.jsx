@@ -12,12 +12,13 @@ export const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
-  const signup = useCallback(
+  const register = useCallback(
     async payload => {
       try {
         const result = await registerUser(payload);
-        await authenticateUser({ user: result.user, token: result.token });
-        navigate(HOMEPAGE);
+        if (result.status === '201') {
+          navigate(LOGIN);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -71,10 +72,10 @@ export const AuthContextProvider = ({ children }) => {
       authenticatedUser,
       login,
       logout,
-      signup,
+      register,
       fetchAuthenticatedUser,
     }),
-    [authenticatedUser, login, logout, signup],
+    [authenticatedUser, login, logout, register],
   );
 
   return <AuthContext.Provider value={memoedAuthValue}>{children}</AuthContext.Provider>;

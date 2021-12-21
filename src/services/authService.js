@@ -1,13 +1,14 @@
-import { LOGIN_API, REGISTER_API, AUTHORIZED_USER } from '../utils/apiRoutes';
+import { LOGIN_API, REGISTER_API, AUTHORIZED_USER_API } from '../utils/apiRoutes';
+import { camelCaseKeys, snakeCaseKeys } from '../utils/convertKeys';
 import { api } from './baseApi';
 
 export const loginUser = payload => {
   return api
-    .post(LOGIN_API, payload)
+    .post(LOGIN_API, snakeCaseKeys(payload))
     .then(result => {
       return {
         user: result.data.user,
-        token: result.data.token,
+        token: result.data.access_token,
       };
     })
     .catch(error => {
@@ -18,18 +19,18 @@ export const loginUser = payload => {
 };
 
 export const me = () => {
-  return api.get(AUTHORIZED_USER).then(result => {
-    return {
+  return api.get(AUTHORIZED_USER_API).then(result => {
+    return camelCaseKeys({
       user: result.data.user,
-    };
+    });
   });
 };
 
 export const registerUser = payload => {
-  return api.post(REGISTER_API, payload).then(result => {
-    return {
+  return api.post(REGISTER_API, snakeCaseKeys(payload)).then(result => {
+    return camelCaseKeys({
       user: result.data.user,
-      token: result.data.token,
-    };
+      status: result.data.status,
+    });
   });
 };

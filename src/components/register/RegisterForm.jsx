@@ -5,14 +5,14 @@ import './register.css';
 
 export const RegisterForm = ({ handleSubmit }) => {
   const initialValues = {
-    username: '',
+    name: '',
     email: '',
     password: '',
     passwordConfirmation: '',
   };
 
   const RegisterSchema = Yup.object().shape({
-    username: Yup.string().trim().required('You have to pick a username'),
+    name: Yup.string().trim().required('You have to pick a name'),
     email: Yup.string().trim().email('Invalid email').required('Email field can not be empty'),
     password: Yup.string().trim().required('Password field can not be empty'),
     passwordConfirmation: Yup.string().oneOf(
@@ -31,17 +31,17 @@ export const RegisterForm = ({ handleSubmit }) => {
         {({ values, handleChange, errors, touched }) => (
           <Form>
             <div className="register-input-container">
-              <label className="form-label">Username: </label>
+              <label className="form-label">Name: </label>
               <Field
-                label="username"
-                name="username"
-                value={values.username}
+                label="name"
+                name="name"
+                value={values.name}
                 onChange={handleChange}
                 autoFocus
                 className="register-field"
               />
-              {errors.username && touched.username ? (
-                <div className="input-error">{errors.username}</div>
+              {errors.name && touched.name ? (
+                <div className="input-error">{errors.name}</div>
               ) : null}
             </div>
             <div className="register-input-container">
