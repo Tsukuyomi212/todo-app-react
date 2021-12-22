@@ -1,8 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Checkbox from '@mui/material/Checkbox';
-import ClearIcon from '@mui/icons-material/Clear';
+import { TodosList } from '../todos/TodosList';
 import { AuthContext } from '../../contexts/AuthContextProvider';
 import { getTodos } from '../../services/todoService';
 import { LOGIN } from '../../utils/routes';
@@ -34,18 +33,7 @@ export const Homepage = () => {
           <Sidebar />
           <div className="content">
             <h1>Things to do:</h1>
-            <div>
-              {todos &&
-                todos.map((todo, index) => (
-                  <p key={index}>
-                    <Checkbox value={todo.completed} color="secondary" />
-                    <span>{todo.title}</span>
-                    <span className="delete-todo-icon">
-                      <ClearIcon />
-                    </span>
-                  </p>
-                ))}
-            </div>
+            {todos && <TodosList todos={todos} />}
             <div>
               <p></p>
             </div>

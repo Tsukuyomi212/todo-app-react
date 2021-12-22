@@ -11,5 +11,14 @@
 }
 
 .delete-todo-icon {
-  margin: 1em 0 0 1em;
+  margin-left: 2em;
+  border: hidden;
+  background-color: white;
+  color: #92d1cd;
+  font-size: medium;
+}
+
+.delete-todo-icon:hover {
+  background-color: #92d1cd;
+  color: white;
 }
