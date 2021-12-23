@@ -1,15 +1,13 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { TodosList } from '../todos/TodosList';
+import { TodoForm } from '../todos/TodoForm';
 import { AuthContext } from '../../contexts/AuthContextProvider';
-import { getTodos } from '../../services/todoService';
-import { LOGIN } from '../../utils/routes';
+import { getTodos, createTodo, deleteTodo, updateTodo } from '../../services/todoService';
 import { Sidebar } from '../sidebar/Sidebar';
 import './homepage.css';
 
 export const Homepage = () => {
-  const navigate = useNavigate();
   const { authenticatedUser } = useContext(AuthContext);
   const [todos, setTodos] = useState([]);
 
@@ -18,13 +16,24 @@ export const Homepage = () => {
     setTodos(todos);
   };
 
+  const addTodo = async values => {
+    await createTodo(values);
+    fetchTodos();
+  };
+
+  const editTodo = async (id, values) => {
+    await updateTodo(id, values);
+    fetchTodos();
+  };
+
+  const removeTodo = async id => {
+    await deleteTodo(id);
+    fetchTodos();
+  };
+
   useEffect(() => {
-    if (authenticatedUser) {
-      fetchTodos();
-    } else {
-      navigate(LOGIN);
-    }
-  }, [authenticatedUser, navigate]);
+    fetchTodos();
+  }, []);
 
   return (
     <>
@@ -33,7 +42,8 @@ export const Homepage = () => {
           <Sidebar />
           <div className="content">
             <h1>Things to do:</h1>
-            {todos && <TodosList todos={todos} />}
+            {todos && <TodosList todos={todos} removeTodo={removeTodo} editTodo={editTodo} />}
+            <TodoForm handleSubmit={addTodo} />
             <div>
               <p></p>
             </div>

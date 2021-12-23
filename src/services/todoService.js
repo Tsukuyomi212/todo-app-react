@@ -8,8 +8,18 @@ export const getTodos = () => {
   });
 };
 
-export const getTodo = () => {};
+export const getTodo = id => {
+  return api.get(`${TODOS_API}/${id}`).then(result => camelCaseKeys(result));
+};
 
-export const updateTodo = () => {};
+export const createTodo = payload => {
+  return api.post(TODOS_API, payload).then(result => camelCaseKeys(result));
+};
 
-export const deleteTodo = () => {};
+export const updateTodo = (id, payload) => {
+  return api.put(`${TODOS_API}/${id}`, payload).then(result => camelCaseKeys(result));
+};
+
+export const deleteTodo = id => {
+  return api.delete(`${TODOS_API}/${id}`).then(() => console.log('deleted'));
+};
