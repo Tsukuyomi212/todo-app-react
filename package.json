@@ -38,6 +38,11 @@
       "react-app/jest"
     ]
   },
+  "eslintIgnore": [
+    "**/*.test.js",
+    "**/*.spec.js",
+    "cypress/*"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
