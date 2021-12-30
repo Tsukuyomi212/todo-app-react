@@ -54,10 +54,8 @@ export const AuthContextProvider = ({ children }) => {
       } catch (error) {
         console.log(error);
       }
-    } else {
-      navigate(LOGIN);
     }
-  }, [navigate]);
+  }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
