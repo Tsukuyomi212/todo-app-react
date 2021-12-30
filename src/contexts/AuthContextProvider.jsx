@@ -11,20 +11,6 @@ export const AuthContextProvider = ({ children }) => {
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
   const navigate = useNavigate();
 
-  const register = useCallback(
-    async payload => {
-      try {
-        const result = await registerUser(payload);
-        if (result.status === '201') {
-          navigate(LOGIN);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [navigate],
-  );
-
   const login = useCallback(
     async payload => {
       try {
@@ -38,6 +24,20 @@ export const AuthContextProvider = ({ children }) => {
       }
     },
     [navigate],
+  );
+
+  const register = useCallback(
+    async payload => {
+      try {
+        const result = await registerUser(payload);
+        if (result.status === '201') {
+          await login({ email: payload.email, password: payload.password });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [login],
   );
 
   const authenticateUser = ({ user, token }) => {
