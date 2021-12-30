@@ -1,15 +1,18 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router';
 import { TodosList } from '../todos/TodosList';
 import { TodoForm } from '../todos/TodoForm';
 import { AuthContext } from '../../contexts/AuthContextProvider';
 import { getTodos, createTodo, deleteTodo, updateTodo } from '../../services/todoService';
 import { Sidebar } from '../sidebar/Sidebar';
 import './homepage.css';
+import { LOGIN } from '../../utils/routes';
 
 export const Homepage = () => {
   const { authenticatedUser } = useContext(AuthContext);
   const [todos, setTodos] = useState([]);
+  const navigate = useNavigate();
 
   const fetchTodos = async () => {
     const todos = await getTodos();
@@ -34,8 +37,10 @@ export const Homepage = () => {
   useEffect(() => {
     if (authenticatedUser) {
       fetchTodos();
+    } else {
+      navigate(LOGIN);
     }
-  }, [authenticatedUser]);
+  }, [authenticatedUser, navigate]);
 
   return (
     <>
