@@ -1,6 +1,6 @@
 import React from 'react';
 import { createContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { me } from '../services/authService';
 import { HOMEPAGE, LOGIN } from '../utils/routes';
 import { loginUser, registerUser } from '../services/authService.js';
@@ -9,7 +9,6 @@ export const AuthContext = createContext(undefined);
 
 export const AuthContextProvider = ({ children }) => {
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
-  const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
   const register = useCallback(
@@ -30,8 +29,10 @@ export const AuthContextProvider = ({ children }) => {
     async payload => {
       try {
         const result = await loginUser(payload);
-        await authenticateUser({ user: result.user, token: result.token });
-        navigate(HOMEPAGE);
+        if (result.token) {
+          await authenticateUser({ user: result.user, token: result.token });
+          navigate(HOMEPAGE);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -41,11 +42,10 @@ export const AuthContextProvider = ({ children }) => {
 
   const authenticateUser = ({ user, token }) => {
     localStorage.setItem('token', token);
-    setToken(token);
     setAuthenticatedUser(user);
   };
 
-  const fetchAuthenticatedUser = async () => {
+  const fetchAuthenticatedUser = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -57,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
     } else {
       navigate(LOGIN);
     }
-  };
+  }, [navigate]);
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
@@ -66,8 +66,10 @@ export const AuthContextProvider = ({ children }) => {
   }, [navigate]);
 
   useEffect(() => {
-    fetchAuthenticatedUser();
-  }, [token]);
+    if (!authenticatedUser) {
+      fetchAuthenticatedUser();
+    }
+  }, [fetchAuthenticatedUser, authenticatedUser]);
 
   const memoedAuthValue = useMemo(
     () => ({
@@ -77,7 +79,7 @@ export const AuthContextProvider = ({ children }) => {
       register,
       fetchAuthenticatedUser,
     }),
-    [authenticatedUser, login, logout, register],
+    [authenticatedUser, fetchAuthenticatedUser, login, logout, register],
   );
 
   return <AuthContext.Provider value={memoedAuthValue}>{children}</AuthContext.Provider>;

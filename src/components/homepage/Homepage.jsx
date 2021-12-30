@@ -32,8 +32,10 @@ export const Homepage = () => {
   };
 
   useEffect(() => {
-    fetchTodos();
-  }, []);
+    if (authenticatedUser) {
+      fetchTodos();
+    }
+  }, [authenticatedUser]);
 
   return (
     <>
@@ -42,7 +44,9 @@ export const Homepage = () => {
           <Sidebar />
           <div className="content">
             <h1>Things to do:</h1>
-            {todos && <TodosList todos={todos} removeTodo={removeTodo} editTodo={editTodo} />}
+            {todos.length > 0 && (
+              <TodosList todos={todos} removeTodo={removeTodo} editTodo={editTodo} />
+            )}
             <TodoForm handleSubmit={addTodo} />
             <div>
               <p></p>
